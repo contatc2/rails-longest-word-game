@@ -1,6 +1,15 @@
 <h1>Result</h1>
 
-<p><%= @score %></p>
+<% if @result == 'success' %>
+<p> <strong>Congratulations!</strong> <%= @word %> is a valid english word!</p>
+<p>Your score is <%= @score %></p>
+<% elsif @result == 'not english' %>
+<p> Sorry, <strong><%= @word %></strong> is valid according to the grid, but is not a valid English word</p>
+<p>Your score is <%= @score %></p>
+<% else%>
+<p> Sorry, <strong><%= @word %></strong>  can't be built out of <%= @letters.join(',') %>...</p>
+<p>Your score is <%= @score %></p>
+<% end %>
 
 
 <%= link_to 'Play again', new_path  %>

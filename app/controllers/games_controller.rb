@@ -7,20 +7,26 @@ class GamesController < ApplicationController
   end
 
   def score
-    result = params[:word].upcase
-    letters = params[:grid].split
-    @score = if in_grid?(result, letters)
-               if english_word?(result)
-                 "Congratulations! #{result} is valid according to the grid and is an English word!"
-               else
-                 "#{result} is valid according to the grid, but is not a valid English word"
-               end
-             else
-               "Sorry #{result} can't be built out of #{params[:grid]}..."
-             end
+    @word = params[:word].upcase
+    @letters = params[:grid].split
+    @result = calculate_score(@word, @letters)
+    @score = session[:score]
   end
 
   private
+
+  def calculate_score(word, letters)
+    session[:score] = 0 unless session[:score]
+    if in_grid?(word, letters)
+      if english_word?(word)
+        session[:score] += word.length
+        'success'
+      else 'not english'
+      end
+    else
+      'not in grid'
+    end
+  end
 
   def english_word?(word)
     url = "https://wagon-dictionary.herokuapp.com/#{word}"
